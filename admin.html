@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Hotel Feedback</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Outfit:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        .admin-main { padding: 40px 0; }
+        .dashboard-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #EEE;
+        }
+        .feedback-table-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        th {
+            background: var(--bg-light);
+            text-align: left;
+            padding: 15px 20px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 1px;
+        }
+        td {
+            padding: 15px 20px;
+            border-bottom: 1px solid #F0F0F0;
+            vertical-align: top;
+        }
+        .rating-chip {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            background: var(--primary-blue);
+            color: white;
+        }
+        .comment-cell { max-width: 400px; color: var(--text-dark); line-height: 1.4; }
+        .date-cell { color: var(--text-muted); white-space: nowrap; font-size: 12px; }
+        .no-data { padding: 50px; text-align: center; color: var(--text-muted); }
+        .btn-danger { background: var(--accent-red); color: white; padding: 6px 12px; font-size: 12px; }
+        .btn-danger:hover { background: #8B2027; }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+        .stat-card h4 { font-size: 12px; color: var(--text-muted); margin-bottom: 10px; }
+        .stat-card div { font-size: 24px; font-weight: 800; color: var(--primary-blue); }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="container header-container">
+            <div class="logos">
+                <div class="logo-group">
+                    <span class="brand-name">Hilton Dashboard</span>
+                </div>
+            </div>
+            <a href="index.html" class="btn btn-primary">Back to Website</a>
+        </div>
+    </header>
+
+    <main class="admin-main container">
+        <div class="dashboard-header">
+            <h2>Guest Feedback Management</h2>
+            <button class="btn btn-danger" onclick="clearAll()">Clear All Data</button>
+        </div>
+
+        <div class="stats-grid" id="stats-grid">
+            <div class="stat-card">
+                <h4>Total Reviews</h4>
+                <div id="total-reviews">0</div>
+            </div>
+            <div class="stat-card">
+                <h4>Avg. Staff</h4>
+                <div id="avg-staff">0.0</div>
+            </div>
+            <div class="stat-card">
+                <h4>Avg. Cleanliness</h4>
+                <div id="avg-cleanliness">0.0</div>
+            </div>
+            <div class="stat-card">
+                <h4>Avg. Breakfast</h4>
+                <div id="avg-breakfast">0.0</div>
+            </div>
+        </div>
+
+        <div class="feedback-table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Ratings</th>
+                        <th>Comment</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="feedback-body">
+                    <!-- Data will be injected here -->
+                </tbody>
+            </table>
+            <div id="no-data-msg" class="no-data" style="display: none;">No feedback received yet.</div>
+        </div>
+    </main>
+
+    <script>
+        function loadFeedback() {
+            const feedback = JSON.parse(localStorage.getItem('hotel_feedback') || '[]');
+            const tbody = document.getElementById('feedback-body');
+            const noDataMsg = document.getElementById('no-data-msg');
+            
+            tbody.innerHTML = '';
+            
+            if (feedback.length === 0) {
+                noDataMsg.style.display = 'block';
+                updateStats([]);
+                return;
+            }
+            
+            noDataMsg.style.display = 'none';
+            
+            feedback.reverse().forEach((item, index) => {
+                const tr = document.createElement('tr');
+                
+                const ratingsHtml = Object.entries(item.ratings).map(([key, value]) => 
+                    `<span class="rating-chip">${key.toUpperCase()}: ${value}★</span>`
+                ).join(' ');
+
+                tr.innerHTML = `
+                    <td class="date-cell">${item.date}</td>
+                    <td>${ratingsHtml}</td>
+                    <td class="comment-cell">${item.comment || '<i>No comment</i>'}</td>
+                    <td><button class="btn btn-danger" onclick="deleteItem(${item.id})">Delete</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            updateStats(feedback);
+        }
+
+        function updateStats(feedback) {
+            document.getElementById('total-reviews').textContent = feedback.length;
+            
+            if (feedback.length === 0) return;
+
+            const categories = ['staff', 'cleanliness', 'breakfast'];
+            categories.forEach(cat => {
+                const sum = feedback.reduce((acc, item) => acc + parseInt(item.ratings[cat] || 0), 0);
+                const avg = (sum / feedback.length).toFixed(1);
+                document.getElementById(`avg-${cat}`).textContent = avg;
+            });
+        }
+
+        function deleteItem(id) {
+            if (!confirm('Are you sure you want to delete this review?')) return;
+            let feedback = JSON.parse(localStorage.getItem('hotel_feedback') || '[]');
+            feedback = feedback.filter(item => item.id !== id);
+            localStorage.setItem('hotel_feedback', JSON.stringify(feedback));
+            loadFeedback();
+        }
+
+        function clearAll() {
+            if (!confirm('WARNING: Really clear ALL feedback data?')) return;
+            localStorage.removeItem('hotel_feedback');
+            loadFeedback();
+        }
+
+        window.onload = loadFeedback;
+    </script>
+</body>
+</html>

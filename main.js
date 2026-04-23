@@ -195,6 +195,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const originalText = translations[currentLang].btn_submit;
         submitBtn.textContent = translations[currentLang].btn_submitting;
 
+        // Save to localStorage for demo purposes
+        const feedbackData = {
+            id: Date.now(),
+            date: new Date().toLocaleString(),
+            ratings: ratings,
+            comment: comment
+        };
+        
+        const existingFeedback = JSON.parse(localStorage.getItem('hotel_feedback') || '[]');
+        existingFeedback.push(feedbackData);
+        localStorage.setItem('hotel_feedback', JSON.stringify(existingFeedback));
+
         // Simulate API call
         setTimeout(() => {
             submitBtn.style.background = 'var(--accent-green)';
