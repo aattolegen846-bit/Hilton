@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guest Quality Rating | Hampton by Hilton Turkistan</title>
+    <meta name="description" content="Official feedback portal for Hampton by Hilton Turkistan. Evaluate our service quality and share your experience.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="main-header">
+        <div class="container header-container">
+            <div class="logos">
+                <div class="logo-group">
+                  <span class="brand-name">Hilton</span>
+                  <div class="brand-divider"></div>
+                  <span class="sub-brand">Hampton <small>by Hilton</small></span>
+                </div>
+            </div>
+            <nav class="main-nav">
+                <a href="#feedback" data-i18n="nav_feedback">SUBMIT FEEDBACK</a>
+                <a href="#location" data-i18n="nav_location">LOCATION</a>
+                <a href="#quality" data-i18n="nav_quality">QUALITY PROGRAM</a>
+                <a href="#contact" data-i18n="nav_contact">CONTACT</a>
+            </nav>
+            <button class="btn btn-primary" data-i18n="btn_book">BOOK</button>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero-section">
+            <div class="hero-image-container">
+                <img src="assets/hero.png" alt="Hampton by Hilton Turkistan" class="hero-image">
+                <div class="hero-overlay"></div>
+                <div class="language-switcher">
+                    <button class="lang-btn active">EN</button>
+                    <button class="lang-btn">RU</button>
+                    <button class="lang-btn">KZ</button>
+                </div>
+                <div class="hero-content container">
+                    <h1 data-i18n="hero_title">YOUR OPINION IS OUR PRIORITY.<br>EVALUATE SERVICE QUALITY.</h1>
+                </div>
+            </div>
+        </section>
+
+        <section id="feedback" class="rating-feedback-section container">
+            <div class="feedback-grid">
+                <div class="ratings-column">
+                    <h2 class="section-title" data-i18n="guest_rating_title">GUEST QUALITY RATING</h2>
+                    <div class="rating-cards">
+                        <div class="rating-card" data-category="cleanliness">
+                            <div class="card-icon">✨</div>
+                            <div class="card-text">
+                                <h3 data-i18n="cleanliness_title">CLEANLINESS</h3>
+                                <p data-i18n="cleanliness_desc">Interactive cleanliness rating.</p>
+                            </div>
+                            <div class="star-rating" id="rating-cleanliness">
+                                <span class="star" data-value="1">★</span>
+                                <span class="star" data-value="2">★</span>
+                                <span class="star" data-value="3">★</span>
+                                <span class="star" data-value="4">★</span>
+                                <span class="star" data-value="5">★</span>
+                            </div>
+                        </div>
+
+                        <div class="rating-card" data-category="staff">
+                            <div class="card-icon">👨‍💼</div>
+                            <div class="card-text">
+                                <h3 data-i18n="staff_title">STAFF</h3>
+                                <p data-i18n="staff_desc">Staff performance rating.</p>
+                            </div>
+                            <div class="star-rating" id="rating-staff">
+                                <span class="star" data-value="1">★</span>
+                                <span class="star" data-value="2">★</span>
+                                <span class="star" data-value="3">★</span>
+                                <span class="star" data-value="4">★</span>
+                                <span class="star" data-value="5">★</span>
+                            </div>
+                        </div>
+
+                        <div class="rating-card" data-category="breakfast">
+                            <div class="card-icon">☕</div>
+                            <div class="card-text">
+                                <h3 data-i18n="breakfast_title">BREAKFAST</h3>
+                                <p data-i18n="breakfast_desc">Breakfast impressions.</p>
+                            </div>
+                            <div class="star-rating" id="rating-breakfast">
+                                <span class="star" data-value="1">★</span>
+                                <span class="star" data-value="2">★</span>
+                                <span class="star" data-value="3">★</span>
+                                <span class="star" data-value="4">★</span>
+                                <span class="star" data-value="5">★</span>
+                            </div>
+                        </div>
+
+                        <div class="rating-card" data-category="comfort">
+                            <div class="card-icon">🛌</div>
+                            <div class="card-text">
+                                <h3 data-i18n="comfort_title">ROOM COMFORT</h3>
+                                <p data-i18n="comfort_desc">Room comfort and amenities.</p>
+                            </div>
+                            <div class="star-rating" id="rating-comfort">
+                                <span class="star" data-value="1">★</span>
+                                <span class="star" data-value="2">★</span>
+                                <span class="star" data-value="3">★</span>
+                                <span class="star" data-value="4">★</span>
+                                <span class="star" data-value="5">★</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="comments-section">
+                        <h3 data-i18n="comments_title">YOUR COMMENTS AND SUGGESTIONS</h3>
+                        <div class="input-group">
+                            <textarea id="comment" data-i18n-placeholder="comment_placeholder" placeholder="We read every review."></textarea>
+                        </div>
+                        <button class="btn btn-submit" id="submit-feedback" data-i18n="btn_submit">SUBMIT FEEDBACK AND IMPROVE SERVICE</button>
+                    </div>
+                </div>
+
+                <aside class="rating-summary">
+                    <div class="summary-card">
+                        <div class="summary-header">
+                            <span class="info-icon">i</span>
+                            <h3 data-i18n="summary_title">CURRENT GUEST RATING</h3>
+                        </div>
+                        <div class="summary-items">
+                            <div class="summary-item">
+                                <span>STAFF</span>
+                                <div class="readonly-stars">★★★★☆</div>
+                                <div class="item-label">Staff Performance</div>
+                            </div>
+                            <div class="summary-item">
+                                <span>BREAKFAST</span>
+                                <div class="readonly-stars">★★★☆☆</div>
+                            </div>
+                            <div class="summary-item">
+                                <span>BREAKFAST QUALITY</span>
+                                <div class="readonly-stars">★★★★☆</div>
+                            </div>
+                            <div class="summary-item">
+                                <span>ROOM COMFORT AND AMENITIES</span>
+                                <div class="readonly-stars">★★★☆☆</div>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </section>
+
+        <section id="quality" class="analysis-section container">
+            <h2 class="section-title" data-i18n="analysis_section_title">HOW WE USE YOUR FEEDBACK</h2>
+            <div class="analysis-grid">
+                <div class="analysis-info">
+                    <div class="info-badge">
+                        <span class="info-icon">i</span>
+                        <div>
+                            <h4 data-i18n="hsqip_title">HSQIP (Hospitality Service Quality Improvement Program) Model</h4>
+                            <p data-i18n="hsqip_desc">Comparative analysis from Quality Improvement Program Model, experience and assessment. Comparative analysis: Quality Improvement Program Model are using the staff-adapted before/every review.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="analysis-comparison">
+                    <div class="comparison-card">
+                        <div class="comparison-header" data-i18n="comparison_header">COMPARATIVE ANALYSIS</div>
+                        <div class="comparison-body">
+                            <div class="comp-col">
+                                <span class="comp-label" data-i18n="comp_before">BEFORE</span>
+                                <span class="comp-value highlight-red">10 mins (10%)</span>
+                                <span class="comp-sub" data-i18n="comp_before_sub">0% data collection</span>
+                            </div>
+                            <div class="comp-arrow">→</div>
+                            <div class="comp-col">
+                                <span class="comp-label" data-i18n="comp_after">AFTER</span>
+                                <span class="comp-value highlight-green">10-5 mins (100%)</span>
+                                <span class="comp-sub" data-i18n="comp_after_sub">After data collection</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container footer-container">
+            <div class="footer-info">
+                <div class="brand-name footer-logo">Hilton <small>HONORS</small></div>
+                <ul class="footer-links">
+                    <li><a href="#">Hilton Honors</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms</a></li>
+                </ul>
+                <div class="social-icons">
+                    <a href="#" class="social-icon">f</a>
+                    <a href="#" class="social-icon">i</a>
+                    <a href="#" class="social-icon">v</a>
+                    <a href="#" class="social-icon">t</a>
+                </div>
+            </div>
+            <div class="footer-map" id="location">
+                <div class="map-placeholder">
+                    <!-- In a real app, this would be an iframe or a canvas-based map -->
+                    <div class="map-marker">📍</div>
+                    <div class="map-text">Hampton by Hilton Turkistan</div>
+                    <div class="map-address">6A Zholbarys Khan St, Turkistan</div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>
