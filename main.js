@@ -1,4 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // --- Supabase Config ---
+    // СІЗДІҢ SUPABASE МӘЛІМЕТТЕРІҢІЗДІ ОСЫ ЖЕРГЕ ҚОЙЫҢЫЗ:
+    const SUPABASE_URL = 'https://wlpzucakitgfbpwrysrd.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndscHp1Y2FraXRnZmJwd3J5c3JkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY5MzQyMDMsImV4cCI6MjA5MjUxMDIwM30.v-V-R7GXtkygkzCSkiQ_M8IWhfl4r54SjcnxA11UfTk';
+    
+    let supabaseClient = null;
+    if (SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
+        supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    }
+
     // --- i18n Implementation ---
     const translations = {
         EN: {
@@ -22,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
             btn_submit: "SUBMIT FEEDBACK AND IMPROVE SERVICE",
             summary_title: "CURRENT GUEST RATING",
             analysis_section_title: "HOW WE USE YOUR FEEDBACK",
-            hsqip_title: "HSQIP (Hospitality Service Quality Improvement Program) Model",
+            hsqip_title: "Hilton Service Quality Improvement Program",
             hsqip_desc: "Comparative analysis from Quality Improvement Program Model, experience and assessment.",
             comparison_header: "COMPARATIVE ANALYSIS",
             comp_before: "BEFORE",
@@ -54,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
             btn_submit: "ОТПРАВИТЬ ОТЗЫВ И УЛУЧШИТЬ СЕРВИС",
             summary_title: "ТЕКУЩИЙ РЕЙТИНГ ГОСТЕЙ",
             analysis_section_title: "КАК МЫ ИСПОЛЬЗУЕМ ВАШ ОТЗЫВ",
-            hsqip_title: "Модель HSQIP (Программа повышения качества гостеприимства)",
+            hsqip_title: "Программа повышения качества обслуживания Hilton",
             hsqip_desc: "Сравнительный анализ на основе модели программы улучшения качества, опыта и оценок.",
             comparison_header: "СРАВНИТЕЛЬНЫЙ АНАЛИЗ",
             comp_before: "ДО",
@@ -86,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
             btn_submit: "ПІКІР ЖІБЕРУ ЖӘНЕ ҚЫЗМЕТТІ ЖАҚСАРТУ",
             summary_title: "ҚОНАҚТАРДЫҢ АҒЫМДАҒЫ РЕЙТИНГІ",
             analysis_section_title: "БІЗ СІЗДІҢ ПІКІРІҢІЗДІ ҚАЛАЙ ҚОЛДАНАМЫЗ",
-            hsqip_title: "HSQIP (Қонақжайлылық сапасын арттыру бағдарламасы) моделі",
+            hsqip_title: "Hilton қызмет көрсету сапасын жақсарту бағдарламасы",
             hsqip_desc: "Сапаны жақсарту бағдарламасы моделі, тәжірибе және бағалау негізіндегі салыстырмалы талдау.",
             comparison_header: "САЛЫСТЫРМАЛЫ ТАЛДАУ",
             comp_before: "ДЕЙІН",
@@ -194,16 +204,25 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.disabled = true;
         submitBtn.textContent = translations[currentLang].btn_submitting;
 
-        // Save to localStorage for demo purposes
         const feedbackData = {
-            id: Date.now(),
-            date: new Date().toLocaleString(),
             ratings: ratings,
-            comment: comment
+            comment: comment,
+            date: new Date().toLocaleString()
         };
         
+        // Save to Supabase if configured
+        if (supabaseClient) {
+            supabaseClient
+                .from('hotel_feedback')
+                .insert([feedbackData])
+                .then(({ error }) => {
+                    if (error) console.error('Supabase Error:', error);
+                });
+        }
+
+        // Always save to localStorage as fallback/backup
         const existingFeedback = JSON.parse(localStorage.getItem('hotel_feedback') || '[]');
-        existingFeedback.push(feedbackData);
+        existingFeedback.push({ ...feedbackData, id: Date.now() });
         localStorage.setItem('hotel_feedback', JSON.stringify(existingFeedback));
 
         // Simulate API call

@@ -232,11 +232,24 @@ h1, h2, h3, .brand-name {
     transform: translateY(-5px);
 }
 
-.card-icon {
-    font-size: 32px;
+.rating-icon {
+    font-size: 28px;
+    margin-bottom: 15px;
+    color: var(--primary-blue);
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+    height: 40px;
+}
+
+.rating-icon svg {
+    width: 32px;
+    height: 32px;
+    transition: var(--transition);
+}
+
+.rating-card:hover .rating-icon svg {
+    transform: scale(1.1);
 }
 
 .card-text h3 {
@@ -541,7 +554,6 @@ h1, h2, h3, .brand-name {
     .feedback-grid, .analysis-grid, .footer-container {
         grid-template-columns: 1fr;
     }
-    
     .hero-content h1 {
         font-size: 32px;
     }

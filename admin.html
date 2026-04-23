@@ -135,7 +135,18 @@
         </div>
     </main>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
+        // --- Supabase Config ---
+        // СІЗДІҢ SUPABASE МӘЛІМЕТТЕРІҢІЗДІ ОСЫ ЖЕРГЕ ҚОЙЫҢЫЗ:
+        const SUPABASE_URL = 'https://wlpzucakitgfbpwrysrd.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndscHp1Y2FraXRnZmJwd3J5c3JkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY5MzQyMDMsImV4cCI6MjA5MjUxMDIwM30.v-V-R7GXtkygkzCSkiQ_M8IWhfl4r54SjcnxA11UfTk';
+        
+        let supabaseClient = null;
+        if (SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
+            supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        }
+
         const translations = {
             EN: {
                 admin_brand: "Hilton Dashboard",
@@ -206,7 +217,7 @@
                     el.innerHTML = translations[lang][key];
                 }
             });
-            loadFeedback(); // Refresh table labels
+            loadFeedback();
         }
 
         const langBtns = document.querySelectorAll('.lang-btn');
@@ -218,8 +229,20 @@
             });
         });
 
-        function loadFeedback() {
-            const feedback = JSON.parse(localStorage.getItem('hotel_feedback') || '[]');
+        async function loadFeedback() {
+            let feedback = JSON.parse(localStorage.getItem('hotel_feedback') || '[]');
+            
+            if (supabaseClient) {
+                const { data, error } = await supabaseClient
+                    .from('hotel_feedback')
+                    .select('*')
+                    .order('date', { ascending: false });
+                
+                if (!error && data) {
+                    feedback = data;
+                }
+            }
+
             const tbody = document.getElementById('feedback-body');
             const noDataMsg = document.getElementById('no-data-msg');
             
@@ -233,9 +256,8 @@
             
             noDataMsg.style.display = 'none';
             
-            feedback.reverse().forEach((item) => {
+            feedback.forEach((item) => {
                 const tr = document.createElement('tr');
-                
                 const ratingsHtml = Object.entries(item.ratings).map(([key, value]) => 
                     `<span class="rating-chip">${key.toUpperCase()}: ${value}★</span>`
                 ).join(' ');
@@ -244,7 +266,7 @@
                     <td class="date-cell">${item.date}</td>
                     <td>${ratingsHtml}</td>
                     <td class="comment-cell">${item.comment || '<i>' + translations[currentLang].no_comment + '</i>'}</td>
-                    <td><button class="btn btn-danger" onclick="deleteItem(${item.id})">${translations[currentLang].btn_delete}</button></td>
+                    <td><button class="btn btn-danger" onclick="deleteItem('${item.id || item.date}')">${translations[currentLang].btn_delete}</button></td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -267,16 +289,25 @@
             });
         }
 
-        function deleteItem(id) {
+        async function deleteItem(id) {
             if (!confirm(translations[currentLang].confirm_delete)) return;
-            let feedback = JSON.parse(localStorage.getItem('hotel_feedback') || '[]');
-            feedback = feedback.filter(item => item.id !== id);
-            localStorage.setItem('hotel_feedback', JSON.stringify(feedback));
+            
+            if (supabaseClient && id.length > 15) {
+                await supabaseClient.from('hotel_feedback').delete().eq('id', id);
+            } else {
+                let feedback = JSON.parse(localStorage.getItem('hotel_feedback') || '[]');
+                feedback = feedback.filter(item => (item.id || item.date) != id);
+                localStorage.setItem('hotel_feedback', JSON.stringify(feedback));
+            }
             loadFeedback();
         }
 
-        function clearAll() {
+        async function clearAll() {
             if (!confirm(translations[currentLang].confirm_clear)) return;
+            
+            if (supabaseClient) {
+                await supabaseClient.from('hotel_feedback').delete().neq('date', '0');
+            }
             localStorage.removeItem('hotel_feedback');
             loadFeedback();
         }

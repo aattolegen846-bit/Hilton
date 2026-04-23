@@ -52,7 +52,9 @@
                     <h2 class="section-title" data-i18n="guest_rating_title">GUEST QUALITY RATING</h2>
                     <div class="rating-cards">
                         <div class="rating-card" data-category="cleanliness">
-                            <div class="card-icon">✨</div>
+                            <div class="rating-icon">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M7.5 5.6L10 7 8.6 4.5 10 2 7.5 3.4 5 2l1.4 2.5L5 7zm12 9.8L17 14l1.4 2.5L17 19l2.5-1.4L22 19l-1.4-2.5L22 14zM22 2l-2.5 1.4L17 2l1.4 2.5L17 7l2.5-1.4L22 7l-1.4-2.5zm-7.63 5.29c-.39-.39-1.02-.39-1.41 0L1.29 18.96c-.39.39-.39 1.02 0 1.41l2.34 2.34c.39.39 1.02.39 1.41 0L16.7 11.05c.39-.39.39-1.02 0-1.41l-2.33-2.35zm-1.03 5.41l-2.34-2.34 1.66-1.66 2.34 2.34-1.66 1.66z"></path></svg>
+                        </div>
                             <div class="card-text">
                                 <h3 data-i18n="cleanliness_title">CLEANLINESS</h3>
                                 <p data-i18n="cleanliness_desc">Interactive cleanliness rating.</p>
@@ -67,7 +69,9 @@
                         </div>
 
                         <div class="rating-card" data-category="staff">
-                            <div class="card-icon">👨‍💼</div>
+                            <div class="rating-icon">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path></svg>
+                        </div>
                             <div class="card-text">
                                 <h3 data-i18n="staff_title">STAFF</h3>
                                 <p data-i18n="staff_desc">Staff performance rating.</p>
@@ -82,7 +86,9 @@
                         </div>
 
                         <div class="rating-card" data-category="breakfast">
-                            <div class="card-icon">☕</div>
+                            <div class="rating-icon">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M20 3H4v10c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-3h2c1.11 0 2-.89 2-2V5c0-1.11-.89-2-2-2zm0 5h-2V5h2v3zM2 21h18v-2H2v2z"></path></svg>
+                        </div>
                             <div class="card-text">
                                 <h3 data-i18n="breakfast_title">BREAKFAST</h3>
                                 <p data-i18n="breakfast_desc">Breakfast impressions.</p>
@@ -97,7 +103,9 @@
                         </div>
 
                         <div class="rating-card" data-category="comfort">
-                            <div class="card-icon">🛌</div>
+                            <div class="rating-icon">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M7 13c1.66 0 3-1.34 3-3S8.66 7 7 7s-3 1.34-3 3 1.34 3 3 3zm10-6h-8v7H3V5H1v15h2v-3h18v3h2v-9c0-2.21-1.79-4-4-4z"></path></svg>
+                        </div>
                             <div class="card-text">
                                 <h3 data-i18n="comfort_title">ROOM COMFORT</h3>
                                 <p data-i18n="comfort_desc">Room comfort and amenities.</p>
@@ -156,9 +164,8 @@
             <div class="analysis-grid">
                 <div class="analysis-info">
                     <div class="info-badge">
-                        <span class="info-icon">i</span>
-                        <div>
-                            <h4 data-i18n="hsqip_title">HSQIP (Hospitality Service Quality Improvement Program) Model</h4>
+                        <h2 class="section-title" data-i18n="quality_title">GUEST QUALITY RATING</h2>
+                <p class="section-subtitle" data-i18n="quality_subtitle">Hilton Service Quality Improvement Program</p>
                             <p data-i18n="hsqip_desc">Comparative analysis from Quality Improvement Program Model, experience and assessment. Comparative analysis: Quality Improvement Program Model are using the staff-adapted before/every review.</p>
                         </div>
                     </div>
@@ -213,6 +220,7 @@
         </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="main.js"></script>
 </body>
 </html>
