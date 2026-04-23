@@ -192,7 +192,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Show loading state
         submitBtn.disabled = true;
-        const originalText = translations[currentLang].btn_submit;
         submitBtn.textContent = translations[currentLang].btn_submitting;
 
         // Save to localStorage for demo purposes
@@ -212,6 +211,9 @@ document.addEventListener('DOMContentLoaded', () => {
             submitBtn.style.background = 'var(--accent-green)';
             submitBtn.textContent = translations[currentLang].btn_thank_you;
             
+            // Update the sidebar summary immediately
+            updateSummarySidebar();
+
             // Clear form
             textarea.value = '';
             ratingContainers.forEach(c => {
@@ -226,6 +228,35 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 3000);
         }, 1500);
     });
+
+    function updateSummarySidebar() {
+        const feedback = JSON.parse(localStorage.getItem('hotel_feedback') || '[]');
+        if (feedback.length === 0) return;
+
+        const categories = {
+            'staff': 'summary-staff',
+            'breakfast': 'summary-breakfast',
+            'cleanliness': 'summary-breakfast-quality', // Mapping cleanliness to breakfast-quality for demo if needed, or adjust
+            'comfort': 'summary-comfort'
+        };
+
+        Object.entries(categories).forEach(([cat, elementId]) => {
+            const sum = feedback.reduce((acc, item) => acc + parseInt(item.ratings[cat] || 0), 0);
+            const avg = Math.round(sum / feedback.length);
+            
+            const el = document.getElementById(elementId);
+            if (el) {
+                let starsString = '';
+                for (let i = 1; i <= 5; i++) {
+                    starsString += (i <= avg) ? '★' : '☆';
+                }
+                el.textContent = starsString;
+            }
+        });
+    }
+
+    // Call on load
+    updateSummarySidebar();
 
     // Simple scroll animation for cards
     const observerOptions = {
