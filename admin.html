@@ -80,34 +80,39 @@
         <div class="container header-container">
             <div class="logos">
                 <div class="logo-group">
-                    <span class="brand-name">Hilton Dashboard</span>
+                    <span class="brand-name" data-i18n="admin_brand">Hilton Dashboard</span>
                 </div>
             </div>
-            <a href="index.html" class="btn btn-primary">Back to Website</a>
+            <div class="language-switcher" style="position: static; background: #EEE;">
+                <button class="lang-btn active">EN</button>
+                <button class="lang-btn">RU</button>
+                <button class="lang-btn">KZ</button>
+            </div>
+            <a href="index.html" class="btn btn-primary" data-i18n="btn_back">Back to Website</a>
         </div>
     </header>
 
     <main class="admin-main container">
         <div class="dashboard-header">
-            <h2>Guest Feedback Management</h2>
-            <button class="btn btn-danger" onclick="clearAll()">Clear All Data</button>
+            <h2 data-i18n="admin_title">Guest Feedback Management</h2>
+            <button class="btn btn-danger" onclick="clearAll()" data-i18n="btn_clear">Clear All Data</button>
         </div>
 
         <div class="stats-grid" id="stats-grid">
             <div class="stat-card">
-                <h4>Total Reviews</h4>
+                <h4 data-i18n="stat_total">Total Reviews</h4>
                 <div id="total-reviews">0</div>
             </div>
             <div class="stat-card">
-                <h4>Avg. Staff</h4>
+                <h4 data-i18n="stat_avg_staff">Avg. Staff</h4>
                 <div id="avg-staff">0.0</div>
             </div>
             <div class="stat-card">
-                <h4>Avg. Cleanliness</h4>
+                <h4 data-i18n="stat_avg_clean">Avg. Cleanliness</h4>
                 <div id="avg-cleanliness">0.0</div>
             </div>
             <div class="stat-card">
-                <h4>Avg. Breakfast</h4>
+                <h4 data-i18n="stat_avg_breakfast">Avg. Breakfast</h4>
                 <div id="avg-breakfast">0.0</div>
             </div>
         </div>
@@ -116,21 +121,103 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Date</th>
-                        <th>Ratings</th>
-                        <th>Comment</th>
-                        <th>Actions</th>
+                        <th data-i18n="th_date">Date</th>
+                        <th data-i18n="th_ratings">Ratings</th>
+                        <th data-i18n="th_comment">Comment</th>
+                        <th data-i18n="th_actions">Actions</th>
                     </tr>
                 </thead>
                 <tbody id="feedback-body">
                     <!-- Data will be injected here -->
                 </tbody>
             </table>
-            <div id="no-data-msg" class="no-data" style="display: none;">No feedback received yet.</div>
+            <div id="no-data-msg" class="no-data" style="display: none;" data-i18n="no_data">No feedback received yet.</div>
         </div>
     </main>
 
     <script>
+        const translations = {
+            EN: {
+                admin_brand: "Hilton Dashboard",
+                btn_back: "Back to Website",
+                admin_title: "Guest Feedback Management",
+                btn_clear: "Clear All Data",
+                stat_total: "Total Reviews",
+                stat_avg_staff: "Avg. Staff",
+                stat_avg_clean: "Avg. Cleanliness",
+                stat_avg_breakfast: "Avg. Breakfast",
+                th_date: "Date",
+                th_ratings: "Ratings",
+                th_comment: "Comment",
+                th_actions: "Actions",
+                no_data: "No feedback received yet.",
+                confirm_delete: "Are you sure you want to delete this review?",
+                confirm_clear: "WARNING: Really clear ALL feedback data?",
+                btn_delete: "Delete",
+                no_comment: "No comment"
+            },
+            RU: {
+                admin_brand: "Hilton Панель",
+                btn_back: "Вернуться на сайт",
+                admin_title: "Управление отзывами гостей",
+                btn_clear: "Очистить все данные",
+                stat_total: "Всего отзывов",
+                stat_avg_staff: "Сред. Персонал",
+                stat_avg_clean: "Сред. Чистота",
+                stat_avg_breakfast: "Сред. Завтрак",
+                th_date: "Дата",
+                th_ratings: "Рейтинги",
+                th_comment: "Комментарий",
+                th_actions: "Действия",
+                no_data: "Отзывов пока нет.",
+                confirm_delete: "Вы уверены, что хотите удалить этот отзыв?",
+                confirm_clear: "ВНИМАНИЕ: Действительно очистить ВСЕ данные?",
+                btn_delete: "Удалить",
+                no_comment: "Без комментария"
+            },
+            KZ: {
+                admin_brand: "Hilton Панелі",
+                btn_back: "Сайтқа қайту",
+                admin_title: "Қонақтардың пікірлерін басқару",
+                btn_clear: "Барлық деректерді өшіру",
+                stat_total: "Барлық пікірлер",
+                stat_avg_staff: "Орташа Қызметкерлер",
+                stat_avg_clean: "Орташа Тазалық",
+                stat_avg_breakfast: "Орташа Таңғы ас",
+                th_date: "Күні",
+                th_ratings: "Рейтингтер",
+                th_comment: "Пікір",
+                th_actions: "Әрекеттер",
+                no_data: "Пікірлер әлі түскен жоқ.",
+                confirm_delete: "Бұл пікірді өшіргіңіз келетініне сенімдісіз бе?",
+                confirm_clear: "НАЗАР АУДАРЫҢЫЗ: Барлық деректерді өшіру керек пе?",
+                btn_delete: "Өшіру",
+                no_comment: "Пікір жоқ"
+            }
+        };
+
+        let currentLang = 'EN';
+
+        function updateLanguage(lang) {
+            currentLang = lang;
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    el.innerHTML = translations[lang][key];
+                }
+            });
+            loadFeedback(); // Refresh table labels
+        }
+
+        const langBtns = document.querySelectorAll('.lang-btn');
+        langBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                langBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                updateLanguage(btn.textContent.trim());
+            });
+        });
+
         function loadFeedback() {
             const feedback = JSON.parse(localStorage.getItem('hotel_feedback') || '[]');
             const tbody = document.getElementById('feedback-body');
@@ -146,7 +233,7 @@
             
             noDataMsg.style.display = 'none';
             
-            feedback.reverse().forEach((item, index) => {
+            feedback.reverse().forEach((item) => {
                 const tr = document.createElement('tr');
                 
                 const ratingsHtml = Object.entries(item.ratings).map(([key, value]) => 
@@ -156,8 +243,8 @@
                 tr.innerHTML = `
                     <td class="date-cell">${item.date}</td>
                     <td>${ratingsHtml}</td>
-                    <td class="comment-cell">${item.comment || '<i>No comment</i>'}</td>
-                    <td><button class="btn btn-danger" onclick="deleteItem(${item.id})">Delete</button></td>
+                    <td class="comment-cell">${item.comment || '<i>' + translations[currentLang].no_comment + '</i>'}</td>
+                    <td><button class="btn btn-danger" onclick="deleteItem(${item.id})">${translations[currentLang].btn_delete}</button></td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -168,10 +255,12 @@
         function updateStats(feedback) {
             document.getElementById('total-reviews').textContent = feedback.length;
             
-            if (feedback.length === 0) return;
-
             const categories = ['staff', 'cleanliness', 'breakfast'];
             categories.forEach(cat => {
+                if (feedback.length === 0) {
+                    document.getElementById(`avg-${cat}`).textContent = "0.0";
+                    return;
+                }
                 const sum = feedback.reduce((acc, item) => acc + parseInt(item.ratings[cat] || 0), 0);
                 const avg = (sum / feedback.length).toFixed(1);
                 document.getElementById(`avg-${cat}`).textContent = avg;
@@ -179,7 +268,7 @@
         }
 
         function deleteItem(id) {
-            if (!confirm('Are you sure you want to delete this review?')) return;
+            if (!confirm(translations[currentLang].confirm_delete)) return;
             let feedback = JSON.parse(localStorage.getItem('hotel_feedback') || '[]');
             feedback = feedback.filter(item => item.id !== id);
             localStorage.setItem('hotel_feedback', JSON.stringify(feedback));
@@ -187,7 +276,7 @@
         }
 
         function clearAll() {
-            if (!confirm('WARNING: Really clear ALL feedback data?')) return;
+            if (!confirm(translations[currentLang].confirm_clear)) return;
             localStorage.removeItem('hotel_feedback');
             loadFeedback();
         }
